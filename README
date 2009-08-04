@@ -1,0 +1,5 @@
+4store-ruby by Yves Raimond
+
+A small Ruby library to interact with a Garlik's 4Store instance over HTTP
+
+See examples in the examples/ directory
