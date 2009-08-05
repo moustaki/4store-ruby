@@ -1,5 +1,6 @@
 require 'uri'
 require 'net/http'
+require 'net/https'
 require 'rexml/document'
 require File.expand_path(File.dirname(__FILE__)) + '/namespace'
 
@@ -7,9 +8,12 @@ module FourStore
 
   class Store
 
-    def initialize(endpoint)
+    def initialize(endpoint, options)
+      raise "4Store SPARQL end-point URI must end by '/sparql/'" if endpoint.split("/sparql/").size != 1
       @endpoint = URI.parse(endpoint)
       @proxy = URI.parse(ENV['HTTP_PROXY']) if ENV['HTTP_PROXY']
+      @certificate = options["certificate"]
+      @key = options["key"]
     end
 
     def select(query)
@@ -32,7 +36,7 @@ module FourStore
 
     def add(graph, turtle)
       http.start do |h|
-        request = Net::HTTP::Post.new(@endpoint.path.split("/sparql/")[0] + "/data/")
+        request = Net::HTTP::Post.new((@endpoint.path.split("/sparql/")[0] or "") + "/data/")
         request.set_form_data({
             'graph' => graph,
             'data' => Namespace::to_turtle + turtle,
@@ -53,11 +57,17 @@ module FourStore
 
     def http
       if @proxy
-        http = Net::HTTP::Proxy(@proxy.host, @proxy.port).new(@endpoint.host, @endpoint.port)
+        h = Net::HTTP::Proxy(@proxy.host, @proxy.port).new(@endpoint.host, @endpoint.port)
       else
-        http = Net::HTTP.new(@endpoint.host, @endpoint.port)
+        h = Net::HTTP.new(@endpoint.host, @endpoint.port)
       end
-      http
+      if @certificate && @key
+        h.use_ssl = true
+        h.cert = OpenSSL::X509::Certificate.new( File.read(@certificate) )
+        h.key = OpenSSL::PKey::RSA.new( File.read(@key) )
+        h.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      end
+      h
     end
 
     def parse_sparql_xml_results(xml)
