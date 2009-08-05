@@ -1,6 +1,5 @@
 require 'uri'
 require 'net/http'
-require 'net/https'
 require 'rexml/document'
 require File.expand_path(File.dirname(__FILE__)) + '/namespace'
 
@@ -8,7 +7,7 @@ module FourStore
 
   class Store
 
-    def initialize(endpoint, options)
+    def initialize(endpoint, options = nil)
       raise "4Store SPARQL end-point URI must end by '/sparql/'" if endpoint.split("/sparql/").size != 1
       @endpoint = URI.parse(endpoint)
       @proxy = URI.parse(ENV['HTTP_PROXY']) if ENV['HTTP_PROXY']
@@ -62,6 +61,7 @@ module FourStore
         h = Net::HTTP.new(@endpoint.host, @endpoint.port)
       end
       if @certificate && @key
+        require 'net/https'
         h.use_ssl = true
         h.cert = OpenSSL::X509::Certificate.new( File.read(@certificate) )
         h.key = OpenSSL::PKey::RSA.new( File.read(@key) )
