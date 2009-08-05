@@ -11,8 +11,8 @@ module FourStore
       raise "4Store SPARQL end-point URI must end by '/sparql/'" if endpoint.split("/sparql/").size != 1
       @endpoint = URI.parse(endpoint)
       @proxy = URI.parse(ENV['HTTP_PROXY']) if ENV['HTTP_PROXY']
-      @certificate = options["certificate"]
-      @key = options["key"]
+      @certificate = options["certificate"] if options
+      @key = options["key"] if options
     end
 
     def select(query)
