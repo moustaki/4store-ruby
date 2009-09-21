@@ -6,7 +6,10 @@ module FourStore
       'dc' => 'http://purl.org/dc/elements/1.1/',
       'foaf' => 'http://xmlns.com/foaf/0.1/',
       'rdfs' => 'http://www.w3.org/2000/01/rdf-schema#',
-      'xsd' => 'http://www.w3.org/2001/XMLSchema#'
+      'xsd' => 'http://www.w3.org/2001/XMLSchema#',
+      'activ' => 'http://www.bbc.co.uk/ontologies/activity/',
+      'event' => 'http://purl.org/NET/c4dm/event.owl#',
+      'po' => 'http://purl.org/ontology/po/'
     }
 
     def self.add(short, long)

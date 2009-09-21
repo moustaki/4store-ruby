@@ -1,4 +1,4 @@
-require '../lib/FourStore/store'
+require '../lib/four_store/store'
 require 'pp'
 
 store = FourStore::Store.new 'http://dbtune.org/beancounter/sparql/'
