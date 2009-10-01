@@ -53,6 +53,17 @@ module FourStore
       end
     end
 
+    def load(uri)
+      # WARNING - relies on the -U flag being set when running 4s-httpd
+      http.start do |h|
+        request = Net::HTTP::Post.new((@endpoint.path.split("/sparql/")[0] or "") + "/update/")
+        request.set_form_data({
+            'update' => "LOAD <#{uri}>"
+        })
+        response = h.request(request)
+      end
+    end
+
     private
 
     def http
