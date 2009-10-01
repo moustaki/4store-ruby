@@ -13,12 +13,13 @@ module FourStore
       @proxy = URI.parse(ENV['HTTP_PROXY']) if ENV['HTTP_PROXY']
       @certificate = options["certificate"] if options
       @key = options["key"] if options
+      @softlimit = options["soft-limit"] if options
     end
 
     def select(query)
       http.start do |h|
         request = Net::HTTP::Post.new(@endpoint.path)
-        request.set_form_data({ 'query' => Namespace::to_sparql + query })
+        request.set_form_data({ 'query' => Namespace::to_sparql + query, 'soft-limit' => @softlimit })
         response = h.request(request)
         parse_sparql_xml_results(response.body)
       end
