@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name = "4store-ruby"
-  s.version = "0.0.3"
-  s.date = "2009-10-01"
+  s.version = "0.0.4"
+  s.date = "2010-07-08"
   s.summary = "4Store Ruby library"
   s.email = "yves@dbtune.org"
   s.homepage = "http://github.com/moustaki/4store-ruby"
