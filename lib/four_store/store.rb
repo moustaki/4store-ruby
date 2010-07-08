@@ -84,7 +84,7 @@ module FourStore
 
     def parse_sparql_xml_results(xml)
       results = []
-      doc = REXML::Document.new xml
+      doc = REXML::Document.new(REXML::Source.new(xml))
       doc.elements.each("*/results/result") do |result|
         result_hash = {}
         result.elements.each do |binding|
