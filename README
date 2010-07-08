@@ -3,3 +3,10 @@
 A small Ruby library to interact with a Garlik's 4Store instance over HTTP
 
 See examples in the examples/ directory
+
+  require 'rubygems'
+  require '4store-ruby'
+  store = FourStore::Store.new 'http://dbtune.org/bbc/programmes/sparql/'
+  store.select("SELECT DISTINCT ?p WHERE {?p a <http://purl.org/ontology/po/Person>} LIMIT 10")
+
+
